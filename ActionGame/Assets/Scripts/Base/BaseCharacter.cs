@@ -9,6 +9,7 @@ public abstract class BaseCharacter : MonoBehaviour , IDamageable , IMovable
 
     protected virtual void Awake()
     {
+        
     }
 
     public virtual void Move(Vector2 direction)

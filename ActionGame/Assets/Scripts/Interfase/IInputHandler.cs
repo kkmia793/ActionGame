@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IInputHandler
 {
-    float GetHorizontalInput();
+    //float GetHorizontalInput();
     bool IsJumpPressed();
 }
