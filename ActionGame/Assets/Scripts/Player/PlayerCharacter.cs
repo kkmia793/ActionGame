@@ -10,6 +10,8 @@ public class PlayerCharacter : BaseCharacter , IDamageable , IMovable
 
     [SerializeField] private CharacterStats characterStats;
     private bool _isGrounded;
+    
+    [SerializeField] private float autoScrollSpeed = 3f;
 
     protected override void Awake()
     {
@@ -33,8 +35,14 @@ public class PlayerCharacter : BaseCharacter , IDamageable , IMovable
 
     private void Update()
     {
-        HandleMovement();
+        // HandleMovement();
+        AutoScroll();
         HandleJump();
+    }
+    
+    private void AutoScroll()
+    {
+        _rb.velocity = new Vector2(autoScrollSpeed, _rb.velocity.y);
     }
     
     public override void Move(Vector2 direction)
