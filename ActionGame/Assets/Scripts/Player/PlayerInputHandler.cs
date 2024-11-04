@@ -1,16 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System;
 
-public class PlayerInputHandler : IInputHandler
+public class PlayerInputHandler : IInputHandler, IDisposable
 {
-    public float GetHorizontalInput()
+    private PlayerControls _playerControls;
+    public event Action OnJumpPressed;
+
+    public PlayerInputHandler()
     {
-        return Input.GetAxis("Horizontal");
+        _playerControls = new PlayerControls();
+        _playerControls.Player.Jump.performed += context => HandleJump(context);
+        _playerControls.Enable();
+    }
+
+    // public float GetHorizontalInput()
+    // {
+        //return   //_playerControls.Player.Move.ReadValue<Vector2>().x;
+    // }
+
+    private void HandleJump(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OnJumpPressed?.Invoke();
+        }
     }
 
     public bool IsJumpPressed()
     {
-        return Input.GetButtonDown("Jump");
+        return _playerControls.Player.Jump.triggered;
+    }
+
+    public void Dispose()
+    {
+        _playerControls.Disable();
     }
 }
