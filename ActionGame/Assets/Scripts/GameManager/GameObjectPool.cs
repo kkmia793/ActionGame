@@ -12,14 +12,14 @@ public class GameObjectPool
         _createFunc = createFunc ?? throw new ArgumentNullException(nameof(createFunc));
     }
 
-    public GameObject Get()
+    public virtual GameObject Get() 
     {
         GameObject obj = _pool.Count > 0 ? _pool.Dequeue() : _createFunc();
         obj.SetActive(true);
         return obj;
     }
 
-    public void Return(GameObject obj)
+    public virtual void Return(GameObject obj) 
     {
         if (obj == null) throw new ArgumentNullException(nameof(obj));
 

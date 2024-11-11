@@ -7,23 +7,20 @@ public class StageGenerator : MonoBehaviour
 {
     private IStageGenerationStrategy _generationStrategy;
     private GameObjectPool _segmentPool;
-    private GameObjectPool _obstaclePool;
     private Queue<GameObject> _activeSegments = new Queue<GameObject>();
     private Vector3 _nextSpawnPosition;
 
     [SerializeField] private Transform player;
     [SerializeField] private float spawnDistance = 30f; // プレイヤーがこの距離に達すると新しいセグメントを生成
-    [SerializeField] private int maxSegments = 5; // 表示される最大セグメント数を設定
+    [SerializeField] private int maxSegments = 5;       // 表示される最大セグメント数を設定
 
     [Inject]
     public void Construct(
         IStageGenerationStrategy generationStrategy,
-        [Inject(Id = "SegmentPool")] GameObjectPool segmentPool,
-        [InjectOptional(Id = "ObstaclePool")] GameObjectPool obstaclePool)
+        [Inject(Id = "SegmentPool")] GameObjectPool segmentPool)
     {
         _generationStrategy = generationStrategy;
         _segmentPool = segmentPool;
-        _obstaclePool = obstaclePool;
     }
 
     private void Start()
@@ -54,18 +51,8 @@ public class StageGenerator : MonoBehaviour
         newSegment.SetActive(true);
         _activeSegments.Enqueue(newSegment);
 
-        // 全体の幅を子オブジェクトのRendererを使って計算
         float segmentWidth = CalculateTotalWidth(newSegment);
         _nextSpawnPosition += new Vector3(segmentWidth, 0, 0);
-
-        // 障害物の生成は obstaclePool がある場合のみ実行
-        if (_obstaclePool != null && Random.value > 0.5f)
-        {
-            GameObject newObstacle = _obstaclePool.Get();
-            float obstacleOffsetX = Random.Range(1f, segmentWidth - 1f);
-            newObstacle.transform.position = newSegment.transform.position + new Vector3(obstacleOffsetX, 1f, 0);
-            newObstacle.SetActive(true);
-        }
 
         if (_activeSegments.Count > maxSegments)
         {

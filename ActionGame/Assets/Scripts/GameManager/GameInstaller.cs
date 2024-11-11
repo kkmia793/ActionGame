@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class GameInstaller : MonoInstaller
 {
-    public GameObject[] segmentPrefabs;
-    public GameObject[] obstaclePrefabs;
+    public GameObject[] segmentPrefabs; // ステージセグメント
+    public GameObject[] obstaclePrefabs; // 障害物プレハブ
+    public GameObject[] enemyPrefabs;    // 敵プレハブ
 
     public override void InstallBindings()
     {
+        // ステージ生成戦略のバインド
         Container.Bind<IStageGenerationStrategy>().To<BasicStageGenerationStrategy>().AsSingle();
 
         // セグメントプールのバインド
@@ -15,19 +17,25 @@ public class GameInstaller : MonoInstaller
         {
             return new GameObjectPool(() => Instantiate(segmentPrefabs[Random.Range(0, segmentPrefabs.Length)]));
         }).AsTransient().WhenInjectedInto<StageGenerator>();
+        
 
-        // 障害物プールのバインド（obstaclePrefabsが空の場合はプールを生成しない）
-        if (obstaclePrefabs != null && obstaclePrefabs.Length > 0)
+        // 敵プールのバインド
+        Container.Bind<GameObjectPool>().WithId("EnemyPool").FromMethod(context =>
         {
-            Container.Bind<GameObjectPool>().WithId("ObstaclePool").FromMethod(context =>
-            {
-                return new GameObjectPool(() => Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)]));
-            }).AsTransient().WhenInjectedInto<StageGenerator>();
-        }
-        else
-        {
-            // obstaclePrefabsが空の場合はnullをバインド
-            Container.Bind<GameObjectPool>().WithId("ObstaclePool").To<GameObjectPool>().FromInstance(null).AsTransient();
-        }
+            return new GameObjectPool(() => Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)]));
+        }).AsTransient().WhenInjectedInto<EnemySpawner>();
+
+        // クラスのバインド
+        Container.Bind<IEnemySpawner>().To<EnemySpawner>().AsSingle();
+        Container.Bind<EnemyManager>().AsSingle();
+    }
+
+    // NullObstaclePool：障害物を生成しない場合のクラス
+    private class NullObstaclePool : GameObjectPool
+    {
+        public NullObstaclePool() : base(() => null) { }
+
+        public override GameObject Get() => null; // 実際には生成しない
+        public override void Return(GameObject obj) { }
     }
 }
