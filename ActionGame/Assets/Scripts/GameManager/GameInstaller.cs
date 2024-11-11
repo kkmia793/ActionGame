@@ -17,7 +17,15 @@ public class GameInstaller : MonoInstaller
         {
             return new GameObjectPool(() => Instantiate(segmentPrefabs[Random.Range(0, segmentPrefabs.Length)]));
         }).AsTransient().WhenInjectedInto<StageGenerator>();
-        
+
+        // 障害物プールのバインド
+        if (obstaclePrefabs != null && obstaclePrefabs.Length > 0)
+        {
+            Container.Bind<GameObjectPool>().WithId("ObstaclePool").FromMethod(context =>
+            {
+                return new GameObjectPool(() => Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)]));
+            }).AsTransient().WhenInjectedInto<ObstacleSpawner>();
+        }
 
         // 敵プールのバインド
         Container.Bind<GameObjectPool>().WithId("EnemyPool").FromMethod(context =>
@@ -26,16 +34,9 @@ public class GameInstaller : MonoInstaller
         }).AsTransient().WhenInjectedInto<EnemySpawner>();
 
         // クラスのバインド
+        Container.Bind<ObstacleSpawner>().AsSingle();
+        Container.Bind<ObstacleManager>().AsSingle();
         Container.Bind<IEnemySpawner>().To<EnemySpawner>().AsSingle();
         Container.Bind<EnemyManager>().AsSingle();
-    }
-
-    // NullObstaclePool：障害物を生成しない場合のクラス
-    private class NullObstaclePool : GameObjectPool
-    {
-        public NullObstaclePool() : base(() => null) { }
-
-        public override GameObject Get() => null; // 実際には生成しない
-        public override void Return(GameObject obj) { }
     }
 }
