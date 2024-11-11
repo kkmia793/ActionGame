@@ -8,6 +8,8 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
     private bool _isGrounded;
 
     [SerializeField] private CharacterStats characterStats;
+    
+    public Vector2 CurrentSpeed => _rb.velocity; 
 
     public void Initialize(IInputHandler inputHandler)
     {
