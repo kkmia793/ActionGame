@@ -3,40 +3,33 @@ using UnityEngine;
 
 public class GameInstaller : MonoInstaller
 {
-    public GameObject[] segmentPrefabs; // ステージセグメント
-    public GameObject[] obstaclePrefabs; // 障害物プレハブ
-    public GameObject[] enemyPrefabs;    // 敵プレハブ
+    public GameObject[] segmentPrefabs;
+    public GameObject[] obstaclePrefabs;
+    public GameObject[] enemyPrefabs;
 
     public override void InstallBindings()
     {
-        // ステージ生成戦略のバインド
         Container.Bind<IStageGenerationStrategy>().To<BasicStageGenerationStrategy>().AsSingle();
 
-        // セグメントプールのバインド
-        Container.Bind<GameObjectPool>().WithId("SegmentPool").FromMethod(context =>
-        {
-            return new GameObjectPool(() => Instantiate(segmentPrefabs[Random.Range(0, segmentPrefabs.Length)]));
-        }).AsTransient().WhenInjectedInto<StageGenerator>();
+        BindGameObjectPoolFactory("SegmentPool", segmentPrefabs);
+        BindGameObjectPoolFactory("ObstaclePool", obstaclePrefabs);
+        BindGameObjectPoolFactory("EnemyPool", enemyPrefabs);
 
-        // 障害物プールのバインド
-        if (obstaclePrefabs != null && obstaclePrefabs.Length > 0)
-        {
-            Container.Bind<GameObjectPool>().WithId("ObstaclePool").FromMethod(context =>
-            {
-                return new GameObjectPool(() => Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)]));
-            }).AsTransient().WhenInjectedInto<ObstacleSpawner>();
-        }
-
-        // 敵プールのバインド
-        Container.Bind<GameObjectPool>().WithId("EnemyPool").FromMethod(context =>
-        {
-            return new GameObjectPool(() => Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)]));
-        }).AsTransient().WhenInjectedInto<EnemySpawner>();
-
-        // クラスのバインド
         Container.Bind<ObstacleSpawner>().AsSingle();
         Container.Bind<ObstacleManager>().AsSingle();
         Container.Bind<IEnemySpawner>().To<EnemySpawner>().AsSingle();
         Container.Bind<EnemyManager>().AsSingle();
+    }
+
+    private void BindGameObjectPoolFactory(string poolId, GameObject[] prefabs)
+    {
+        Container.Bind<GameObjectPool>().WithId(poolId)
+            .FromMethod(_ => new GameObjectPool(() =>
+            {
+                var obj = Instantiate(prefabs[Random.Range(0, prefabs.Length)]);
+                Container.Inject(obj); // 依存性注入
+                return obj;
+            }, Container))
+            .AsCached();
     }
 }

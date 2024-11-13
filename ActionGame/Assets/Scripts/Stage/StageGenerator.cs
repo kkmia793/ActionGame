@@ -50,6 +50,8 @@ public class StageGenerator : MonoBehaviour
         newSegment.transform.position = _nextSpawnPosition;
         newSegment.SetActive(true);
         _activeSegments.Enqueue(newSegment);
+        
+        StageEventDispatcher.NotifyStageSegmentGenerated(newSegment);
 
         float segmentWidth = CalculateTotalWidth(newSegment);
         _nextSpawnPosition += new Vector3(segmentWidth, 0, 0);
