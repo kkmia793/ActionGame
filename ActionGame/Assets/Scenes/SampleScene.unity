@@ -123,6 +123,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &21907548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 21907550}
+  - component: {fileID: 21907549}
+  m_Layer: 0
+  m_Name: EnemyGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &21907549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21907548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2baa21fbf15848359043b1fcbe4ec1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnProbabilityForLongPlatform: 0.7
+--- !u!4 &21907550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21907548}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &495012406
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,6 +197,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c86075fb4394a0c8e54225f08435be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fallThreshold: -10
+  speedThreshold: 1
+  monitorDelay: 3
 --- !u!4 &495012408
 Transform:
   m_ObjectHideFlags: 0
@@ -749,6 +797,8 @@ MonoBehaviour:
   - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
   - {fileID: 2885347762971162107, guid: e3af12bdb5f6c4b349f01da0f8ac6ba4, type: 3}
   - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}
+  - {fileID: 9066793285944256996, guid: ae93ad1a5c0b446d7b8364213e9fa955, type: 3}
+  - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
   obstaclePrefabs:
   - {fileID: 5785745408317313910, guid: 1329bf30d33614226b1df3f1825ad3d3, type: 3}
   enemyPrefabs:
@@ -931,3 +981,4 @@ SceneRoots:
   - {fileID: 1024513313}
   - {fileID: 1673698071}
   - {fileID: 495012408}
+  - {fileID: 21907550}
