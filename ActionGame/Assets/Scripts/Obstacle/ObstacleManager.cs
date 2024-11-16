@@ -1,50 +1,41 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using System.Collections.Generic;
 
 public class ObstacleManager : MonoBehaviour
 {
-    [Inject] private ObstacleSpawner _obstacleSpawner;
+    [Inject] private Dictionary<ObstacleType, IObstacleSpawner> _spawners;
+    [Inject] private List<ObstacleData> _obstacleDataList;
 
-    private List<GameObject> _activeObstacles = new List<GameObject>();
-
-    /// <summary>
-    /// 指定されたセグメントに障害物を生成し、リストに追加。
-    /// </summary>
-    public async UniTask GenerateObstacles(GameObject segment, int obstacleCount)
+    private void OnEnable()
     {
-        for (int i = 0; i < obstacleCount; i++)
+        StageEventDispatcher.OnStageSegmentGenerated += HandleStageSegmentGenerated;
+    }
+
+    private void OnDisable()
+    {
+        StageEventDispatcher.OnStageSegmentGenerated -= HandleStageSegmentGenerated;
+    }
+
+    private void HandleStageSegmentGenerated(GameObject segment)
+    {
+        if (segment.name.Contains("ObstaclePlatform"))
         {
-            Vector3 spawnPosition = _obstacleSpawner.GetSpawnPosition(segment);
-            GameObject obstacle = await _obstacleSpawner.SpawnObstacle(spawnPosition);
-            _activeObstacles.Add(obstacle);
+            var obstacleType = GetRandomObstacleType();
+            var obstacleData = GetObstacleData(obstacleType);
+            _spawners[obstacleType].SpawnObstacles(obstacleData, segment).Forget();
         }
     }
 
-    /// <summary>
-    /// 障害物の状態を監視し、非アクティブな障害物をリストから削除。
-    /// </summary>
-    public void UpdateObstacleStates()
+    private ObstacleType GetRandomObstacleType()
     {
-        for (int i = _activeObstacles.Count - 1; i >= 0; i--)
-        {
-            if (!_activeObstacles[i].activeInHierarchy)
-            {
-                _activeObstacles.RemoveAt(i);
-            }
-        }
+        var values = System.Enum.GetValues(typeof(ObstacleType));
+        return (ObstacleType)values.GetValue(Random.Range(0, values.Length));
     }
 
-    /// <summary>
-    /// すべての障害物を非アクティブにし、リストをクリア。
-    /// </summary>
-    public void ClearAllObstacles()
+    private ObstacleData GetObstacleData(ObstacleType type)
     {
-        foreach (var obstacle in _activeObstacles)
-        {
-            obstacle.SetActive(false);
-        }
-        _activeObstacles.Clear();
+        return _obstacleDataList.Find(data => data.type == type);
     }
 }
