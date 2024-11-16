@@ -541,7 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 893517879}
   spawnDistance: 50
-  maxSegments: 5
+  maxSegments: 10
 --- !u!4 &846465283
 Transform:
   m_ObjectHideFlags: 0
@@ -606,7 +606,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -764,6 +764,63 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.1611119}
   m_EdgeRadius: 0.1
+--- !u!1 &1013329708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1013329710}
+  - component: {fileID: 1013329709}
+  - component: {fileID: 1013329711}
+  m_Layer: 0
+  m_Name: ObstacleGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1013329709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013329708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ca9d8576ef1b40e7bfda689e18bb895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1013329710
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013329708}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1013329711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013329708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e201975b46469381d1e07f908b7c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1024513311
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,15 +851,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segmentPrefabs:
-  - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
   - {fileID: 2885347762971162107, guid: e3af12bdb5f6c4b349f01da0f8ac6ba4, type: 3}
-  - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}
-  - {fileID: 9066793285944256996, guid: ae93ad1a5c0b446d7b8364213e9fa955, type: 3}
   - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
+  - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
+  - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
+  - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
+  - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}
+  - {fileID: 2885347762971162107, guid: e3af12bdb5f6c4b349f01da0f8ac6ba4, type: 3}
+  - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
+  - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
+  - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}
   obstaclePrefabs:
-  - {fileID: 5785745408317313910, guid: 1329bf30d33614226b1df3f1825ad3d3, type: 3}
+  - {fileID: 1073769356438948573, guid: 74fcb5dc9d6614db190b98c3bc63d729, type: 3}
+  - {fileID: 4177356011123277588, guid: a38b5d7bc1d0b4daa972610e23e650f3, type: 3}
+  - {fileID: 1238654841842063649, guid: ba2e68e28d6c047c1b952bddf19af029, type: 3}
   enemyPrefabs:
   - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  obstacleDataList:
+  - {fileID: 11400000, guid: 68635079619ef45b6b6d338956ab9fe5, type: 2}
+  - {fileID: 11400000, guid: 3657c4f02ddf54dc6953c6ca196cc0ab, type: 2}
+  - {fileID: 11400000, guid: d3f89e57e033b4a4ab2233da7977cebf, type: 2}
+  iceObstaclePrefab: {fileID: 1073769356438948573, guid: 74fcb5dc9d6614db190b98c3bc63d729, type: 3}
+  fireballPrefab: {fileID: 4177356011123277588, guid: a38b5d7bc1d0b4daa972610e23e650f3, type: 3}
+  cloudPrefab: {fileID: 1238654841842063649, guid: ba2e68e28d6c047c1b952bddf19af029, type: 3}
 --- !u!4 &1024513313
 Transform:
   m_ObjectHideFlags: 0
@@ -982,3 +1053,4 @@ SceneRoots:
   - {fileID: 1673698071}
   - {fileID: 495012408}
   - {fileID: 21907550}
+  - {fileID: 1013329710}
