@@ -11,9 +11,9 @@ public class GameInstaller : MonoInstaller
     public List<ObstacleData> obstacleDataList;
     
     // 障害物ごとのプレハブ
-       public GameObject iceObstaclePrefab;
-       public GameObject fireballPrefab;
-       public GameObject cloudPrefab;
+    public GameObject iceObstaclePrefab;
+    public GameObject fireballPrefab;
+    public GameObject cloudPrefab;
 
     public override void InstallBindings()
     {

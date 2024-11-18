@@ -18,6 +18,8 @@ public class PlayerState
     private PlayerCharacter _player;
     private float _fallThreshold;
     private float _speedThreshold;
+    private float _totalDistance;
+    private float _moveSpeed;
     private bool _isMonitoring; 
 
     public PlayerState(PlayerCharacter player, float fallThreshold, float speedThreshold)
@@ -59,4 +61,18 @@ public class PlayerState
 
         Debug.Log($"Player state changed to: {_currentState}");
     }
+
+    public float CalculatePlayerTotalDistance()
+    {
+        _totalDistance += _player.CurrentSpeed.x * Time.deltaTime;
+        return _totalDistance;
+    }
+
+    public float SetPlayerMoveSpeed(float newSpeed)
+    {
+        _moveSpeed = newSpeed;
+        
+        return _moveSpeed;
+    }
+    
 }
