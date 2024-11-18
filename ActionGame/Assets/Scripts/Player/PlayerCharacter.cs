@@ -9,14 +9,18 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
 
     [SerializeField] private CharacterStats characterStats;
     
-    public Vector2 CurrentSpeed => _rb.velocity; 
+    
+    private PlayerCharacter _player;
+    public PlayerCharacter Player => _player;
+
+    public Vector2 CurrentSpeed => _rb.velocity;
 
     public void Initialize(IInputHandler inputHandler)
     {
         _inputHandler = inputHandler;
         if (_inputHandler is PlayerInputHandler playerInputHandler)
         {
-            playerInputHandler.OnJumpPressed += HandleJump; 
+            playerInputHandler.OnJumpPressed += HandleJump;
         }
     }
 
@@ -30,7 +34,7 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
             Health = characterStats.health;
             MoveSpeed = characterStats.moveSpeed;
         }
-        
+
         _inputHandler = new PlayerInputHandler();
         Initialize(_inputHandler);
     }
@@ -45,6 +49,11 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
         _rb.velocity = new Vector2(MoveSpeed, _rb.velocity.y);
     }
 
+    public void SetMoveSpeed()
+    {
+       // MoveSpeed = PlayerState._moveSpeed;
+    }
+
     public override void Move(Vector2 direction)
     {
         _rb.velocity = new Vector2(direction.x * MoveSpeed, _rb.velocity.y);
@@ -52,7 +61,7 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
 
     private void HandleJump()
     {
-        if (_isGrounded )
+        if (_isGrounded)
         {
             _rb.velocity = new Vector2(_rb.velocity.x, characterStats.jumpForce);
             _isGrounded = false;

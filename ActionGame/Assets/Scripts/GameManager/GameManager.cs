@@ -1,17 +1,21 @@
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Cysharp.Threading.Tasks; // UniTaskを使用
+using Zenject.SpaceFighter;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     private bool _isGameOver;
-    private PlayerState playerState;
+    private PlayerState _playerState;
+    private float _totalDistance;
 
-    [SerializeField] private float fallThreshold = -10f; // 落下の閾値
-    [SerializeField] private float speedThreshold = 1f;  // 速度の閾値
-    [SerializeField] private float monitorDelay = 3f;    // 監視開始までの遅延時間
+    [SerializeField] private GameSettings gameSettings; 
+
+    public event Action<int> OnDifficultyLevelChanged;
+
+    private int _currentDifficultyLevel = 1;
+    public int CurrentDifficultyLevel => _currentDifficultyLevel;
 
     private void Awake()
     {
@@ -26,65 +30,61 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private async void Start()
+    private void Start()
     {
-        var player = FindObjectOfType<PlayerCharacter>(); // シーン内のPlayerCharacterを検索
+        InitializePlayerState();
+    }
+
+    private void InitializePlayerState()
+    {
+        var player = FindObjectOfType<PlayerCharacter>();
         if (player != null)
         {
-            playerState = new PlayerState(player, fallThreshold, speedThreshold);
-            playerState.OnStateChanged += HandleGameOver; // 状態変化イベントを購読
-            await playerState.StartMonitoringWithDelay(monitorDelay); // 監視開始を遅延させる
-        }
-        else
-        {
-            Debug.LogError("PlayerCharacterが見つかりませんでした。");
+            _playerState = new PlayerState(player, gameSettings.FallThreshold, gameSettings.SpeedThreshold);
+            _playerState.OnStateChanged += HandleGameOver;
         }
     }
 
     private void Update()
     {
-        playerState?.UpdateState(); // PlayerStateの状態を毎フレーム更新
+        if (_isGameOver) return;
+
+        UpdateDistance();
+        CheckDifficultyIncrease();
+        _playerState?.UpdateState();
     }
 
-    private void OnDisable()
+    private void UpdateDistance()
     {
-        if (playerState != null)
+        _totalDistance = _playerState.CalculatePlayerTotalDistance();
+        UIManager.Instance.UpdateDistance(_totalDistance);
+    }
+
+    private void CheckDifficultyIncrease()
+    {
+        int newLevel = Mathf.FloorToInt(_totalDistance / gameSettings.DistancePerLevel) + 1;
+        if (newLevel > _currentDifficultyLevel)
         {
-            playerState.OnStateChanged -= HandleGameOver;
+            _currentDifficultyLevel = newLevel;
+            _playerState.SetPlayerMoveSpeed(gameSettings.InitialSpeed + newLevel * gameSettings.SpeedIncreasePerLevel);
+            OnDifficultyLevelChanged?.Invoke(newLevel);
         }
     }
 
     private void HandleGameOver(PlayerState.State newState)
     {
         if (_isGameOver || newState != PlayerState.State.Dead) return;
-
         _isGameOver = true;
-        Debug.Log("Game Over");
-
-        // ゲームオーバー時に時間を停止
         Time.timeScale = 0f;
-
-        // ゲームオーバー処理（例: UI表示やシーン遷移）
-        //ShowGameOverUI();
-    }
-
-    private void ShowGameOverUI()
-    {
-        Debug.Log("Displaying Game Over UI...");
-        SceneManager.LoadScene("GameOverScene"); // ゲームオーバー画面への遷移
+        UIManager.Instance.DisplayGameOverScreen();
     }
 
     public void RestartGame()
     {
         _isGameOver = false;
-        Time.timeScale = 1f; // 時間を再開
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // 現在のシーンを再読み込み
-    }
-
-    public void LoadMainMenu()
-    {
-        _isGameOver = false;
-        Time.timeScale = 1f; // 時間を再開
-        SceneManager.LoadScene("MainMenu");
+        _currentDifficultyLevel = 1;
+        _totalDistance = 0;
+        Time.timeScale = 1f;
+        SceneTransitionManager.Instance.RestartCurrentScene();
     }
 }
