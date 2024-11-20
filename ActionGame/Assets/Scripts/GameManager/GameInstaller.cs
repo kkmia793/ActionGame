@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class GameInstaller : MonoInstaller
 {
+    [SerializeField] private PlayerCharacter playerCharacter; // Hierarchy上のプレイヤーオブジェクト
+    [SerializeField] private GameSettings gameSettings;
+    
     public GameObject[] segmentPrefabs;
     public GameObject[] obstaclePrefabs;
     public GameObject[] enemyPrefabs;
@@ -46,6 +49,11 @@ public class GameInstaller : MonoInstaller
         // 障害物のプールとスポナーを設定
         //BindObstaclePoolsAndSpawners();
         
+        // PlayerStateをDIコンテナに登録
+        Container.Bind<PlayerState>()
+            .AsSingle()
+            .WithArguments(playerCharacter, gameSettings.FallThreshold, gameSettings.SpeedThreshold);
+        
         Container.Bind<List<ObstacleData>>()
             .FromInstance(obstacleDataList) // Inspectorから設定されるobstacleDataListを使用
             .AsSingle();
@@ -54,6 +62,12 @@ public class GameInstaller : MonoInstaller
         Container.Bind<ObstacleManager>().AsSingle();
         Container.Bind<IEnemySpawner>().To<EnemySpawner>().AsSingle();
         Container.Bind<EnemyManager>().AsSingle();
+        
+        // DifficultyManagerをDIコンテナに登録
+        Container.Bind<DifficultyManager>().AsSingle();
+
+        // GameManagerをDIコンテナに登録
+        Container.Bind<GameManager>().FromComponentInHierarchy().AsSingle();
     }
 
     private void BindGameObjectPoolFactory(string poolId, GameObject[] prefabs)

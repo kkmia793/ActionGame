@@ -642,7 +642,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 893517879}
   spawnDistance: 50
-  maxSegments: 10
+  maxSegments: 8
+  initialPlatformPrefab: {fileID: 8066808320560557658, guid: a8ab19369585841a09e9cd4966cd4fd5, type: 3}
 --- !u!4 &846465283
 Transform:
   m_ObjectHideFlags: 0
@@ -1030,14 +1031,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa852889ca0547c7b7c7989d2358897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCharacter: {fileID: 893517877}
+  gameSettings: {fileID: 11400000, guid: 919ba2dba2ab44905b39b828b5b2af5d, type: 2}
   segmentPrefabs:
-  - {fileID: 2885347762971162107, guid: e3af12bdb5f6c4b349f01da0f8ac6ba4, type: 3}
+  - {fileID: 8570604405417127753, guid: 6831251d57043456f98a2aa610836b29, type: 3}
   - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
   - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
   - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
   - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
   - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}
-  - {fileID: 2885347762971162107, guid: e3af12bdb5f6c4b349f01da0f8ac6ba4, type: 3}
+  - {fileID: 8570604405417127753, guid: 6831251d57043456f98a2aa610836b29, type: 3}
   - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
   - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
   - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}

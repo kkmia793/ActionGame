@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   prefab: {fileID: 4177356011123277588, guid: a38b5d7bc1d0b4daa972610e23e650f3, type: 3}
-  spawnInterval: 0
+  spawnInterval: 1
   spawnPositions:
   - {x: 0, y: 5}
   - {x: 10, y: 10}
   - {x: 20, y: 15}
+  baseSpawnCount: 1
+  maxSpawnCount: 10
+  currentSpawnCount: 0

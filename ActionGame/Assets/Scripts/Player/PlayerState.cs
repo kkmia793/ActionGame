@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Cysharp.Threading.Tasks; 
+using Cysharp.Threading.Tasks;
 
 public class PlayerState
 {
@@ -14,32 +14,34 @@ public class PlayerState
     public State CurrentState => _currentState;
 
     public event Action<State> OnStateChanged; // 状態変化イベント
+    public event Action<float> OnDistanceUpdated; // 進行距離更新イベント
 
     private PlayerCharacter _player;
     private float _fallThreshold;
     private float _speedThreshold;
     private float _totalDistance;
-    private float _moveSpeed;
-    private bool _isMonitoring; 
+    private bool _isMonitoring;
 
     public PlayerState(PlayerCharacter player, float fallThreshold, float speedThreshold)
     {
         _player = player ?? throw new ArgumentNullException(nameof(player));
         _fallThreshold = fallThreshold;
         _speedThreshold = speedThreshold;
-        _isMonitoring = false; 
+        _isMonitoring = false;
     }
 
     public async UniTask StartMonitoringWithDelay(float delaySeconds)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds)); 
-        _isMonitoring = true;
+        _isMonitoring = false; // モニタリングを無効化
+        await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds));
+        _isMonitoring = true; // 遅延後に有効化
     }
 
     public void UpdateState()
     {
-        if (!_isMonitoring) return; 
+        if (!_isMonitoring) return;
         MonitorState();
+        UpdateDistance();
     }
 
     private void MonitorState()
@@ -62,17 +64,21 @@ public class PlayerState
         Debug.Log($"Player state changed to: {_currentState}");
     }
 
-    public float CalculatePlayerTotalDistance()
+    private void UpdateDistance()
     {
         _totalDistance += _player.CurrentSpeed.x * Time.deltaTime;
-        return _totalDistance;
+        OnDistanceUpdated?.Invoke(_totalDistance); // 進行距離の更新を通知
     }
 
-    public float SetPlayerMoveSpeed(float newSpeed)
+    public void SetPlayerMoveSpeed(float newSpeed)
     {
-        _moveSpeed = newSpeed;
-        
-        return _moveSpeed;
+        _player.SetMoveSpeed(newSpeed);
     }
-    
+
+    public void ResetState()
+    {
+        _currentState = State.Alive;
+        _totalDistance = 0;
+        _isMonitoring = false;
+    }
 }

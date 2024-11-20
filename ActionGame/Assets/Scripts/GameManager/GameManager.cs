@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Zenject.SpaceFighter;
+using Zenject; // Zenjectを使う場合
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     private bool _isGameOver;
     private PlayerState _playerState;
+    private DifficultyManager _difficultyManager;
     private float _totalDistance;
 
     [SerializeField] private GameSettings gameSettings; 
@@ -16,6 +17,15 @@ public class GameManager : MonoBehaviour
 
     private int _currentDifficultyLevel = 1;
     public int CurrentDifficultyLevel => _currentDifficultyLevel;
+
+    [Inject]
+    private void Construct(PlayerState playerState, DifficultyManager difficultyManager)
+    {
+        _playerState = playerState;
+        _difficultyManager = difficultyManager;
+        _playerState.OnDistanceUpdated += UpdateDistance;
+        _playerState.OnStateChanged += HandleGameOver;
+    }
 
     private void Awake()
     {
@@ -28,52 +38,43 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
+    } 
+    
+    private async void Start()
     {
-        InitializePlayerState();
-    }
-
-    private void InitializePlayerState()
-    {
-        var player = FindObjectOfType<PlayerCharacter>();
-        if (player != null)
-        {
-            _playerState = new PlayerState(player, gameSettings.FallThreshold, gameSettings.SpeedThreshold);
-            _playerState.OnStateChanged += HandleGameOver;
-        }
+        await _playerState.StartMonitoringWithDelay(1f); 
     }
 
     private void Update()
     {
         if (_isGameOver) return;
-
-        UpdateDistance();
-        CheckDifficultyIncrease();
-        _playerState?.UpdateState();
+        _playerState.UpdateState();
     }
 
-    private void UpdateDistance()
+    private void UpdateDistance(float distance)
     {
-        _totalDistance = _playerState.CalculatePlayerTotalDistance();
+        _totalDistance = distance;
+        CheckDifficultyIncrease();
         UIManager.Instance.UpdateDistance(_totalDistance);
     }
 
     private void CheckDifficultyIncrease()
     {
-        int newLevel = Mathf.FloorToInt(_totalDistance / gameSettings.DistancePerLevel) + 1;
+        int newLevel = _difficultyManager.CalculateDifficulty(_totalDistance, gameSettings.DistancePerLevel);
         if (newLevel > _currentDifficultyLevel)
         {
             _currentDifficultyLevel = newLevel;
-            _playerState.SetPlayerMoveSpeed(gameSettings.InitialSpeed + newLevel * gameSettings.SpeedIncreasePerLevel);
+            float newSpeed = _difficultyManager.GetPlayerSpeed(newLevel, gameSettings.InitialSpeed, gameSettings.SpeedIncreasePerLevel);
+            _playerState.SetPlayerMoveSpeed(newSpeed);
             OnDifficultyLevelChanged?.Invoke(newLevel);
+            Debug.Log($"New Difficulty Level: {_currentDifficultyLevel}, New Speed: {newSpeed}");
         }
     }
 
     private void HandleGameOver(PlayerState.State newState)
     {
         if (_isGameOver || newState != PlayerState.State.Dead) return;
+
         _isGameOver = true;
         Time.timeScale = 0f;
         UIManager.Instance.DisplayGameOverScreen();
@@ -81,10 +82,16 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        ResetGame();
+        SceneTransitionManager.Instance.RestartCurrentScene();
+    }
+
+    private void ResetGame()
+    {
         _isGameOver = false;
         _currentDifficultyLevel = 1;
         _totalDistance = 0;
         Time.timeScale = 1f;
-        SceneTransitionManager.Instance.RestartCurrentScene();
+        _playerState.ResetState();
     }
 }

@@ -13,6 +13,9 @@ public class StageGenerator : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private float spawnDistance = 30f; // プレイヤーがこの距離に達すると新しいセグメントを生成
     [SerializeField] private int maxSegments = 5;       // 表示される最大セグメント数を設定
+    [SerializeField] private GameObject initialPlatformPrefab; // 最初に生成する初期プラットフォーム
+
+    private bool initialPlatformGenerated = false; // InitialPlatformを生成済みかどうか
 
     [Inject]
     public void Construct(
@@ -30,7 +33,12 @@ public class StageGenerator : MonoBehaviour
 
     private async UniTaskVoid GenerateInitialSegments()
     {
-        for (int i = 0; i < maxSegments; i++)
+        if (!initialPlatformGenerated)
+        {
+            GenerateInitialPlatform();
+        }
+
+        for (int i = 1; i < maxSegments; i++) // InitialPlatform以外を生成
         {
             await GenerateSegment();
         }
@@ -42,6 +50,18 @@ public class StageGenerator : MonoBehaviour
         {
             GenerateSegment().Forget();
         }
+    }
+
+    private void GenerateInitialPlatform()
+    {
+        GameObject initialPlatform = Instantiate(initialPlatformPrefab, _nextSpawnPosition, Quaternion.identity);
+        initialPlatform.SetActive(true);
+        _activeSegments.Enqueue(initialPlatform);
+
+        float segmentWidth = CalculateTotalWidth(initialPlatform);
+        _nextSpawnPosition += new Vector3(segmentWidth, 0, 0);
+
+        initialPlatformGenerated = true; // 初期プラットフォームを生成済みに設定
     }
 
     private async UniTask GenerateSegment()
