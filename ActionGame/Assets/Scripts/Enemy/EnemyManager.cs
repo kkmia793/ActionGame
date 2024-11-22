@@ -27,12 +27,12 @@ public class EnemyManager : MonoBehaviour
         {
             if (Random.value <= spawnProbabilityForLongPlatform)
             {
-                GenerateEnemies(segment, Random.Range(2, 4)).Forget();
+                GenerateEnemies(segment, enemyCount:6).Forget();
             }
         }
         else
         {
-            Debug.Log($"Skipping enemy spawn for segment: {segment.name}");
+            //Debug.Log($"Skipping enemy spawn for segment: {segment.name}");
         }
     }
 
