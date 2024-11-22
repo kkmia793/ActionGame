@@ -58,7 +58,7 @@ public class GameInstaller : MonoInstaller
             .FromInstance(obstacleDataList) // Inspectorから設定されるobstacleDataListを使用
             .AsSingle();
         
-        Container.Bind<ObstacleSpawner>().AsSingle();
+        //Container.Bind<ObstacleSpawner>().AsSingle();
         Container.Bind<ObstacleManager>().AsSingle();
         Container.Bind<IEnemySpawner>().To<EnemySpawner>().AsSingle();
         Container.Bind<EnemyManager>().AsSingle();

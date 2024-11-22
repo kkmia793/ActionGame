@@ -4,4 +4,5 @@ using UnityEngine;
 public interface IObstacleSpawner
 {
     UniTask SpawnObstacles(ObstacleData data, GameObject segment);
+    void ReturnObstaclesToPool(GameObject segment);
 }

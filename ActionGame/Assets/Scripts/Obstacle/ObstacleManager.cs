@@ -11,11 +11,13 @@ public class ObstacleManager : MonoBehaviour
     private void OnEnable()
     {
         StageEventDispatcher.OnStageSegmentGenerated += HandleStageSegmentGenerated;
+        StageEventDispatcher.OnStageSegmentRemoved += HandleStageSegmentRemoved;
     }
 
     private void OnDisable()
     {
         StageEventDispatcher.OnStageSegmentGenerated -= HandleStageSegmentGenerated;
+        StageEventDispatcher.OnStageSegmentRemoved -= HandleStageSegmentRemoved;
     }
 
     private void HandleStageSegmentGenerated(GameObject segment)
@@ -25,6 +27,17 @@ public class ObstacleManager : MonoBehaviour
             var obstacleType = GetRandomObstacleType();
             var obstacleData = GetObstacleData(obstacleType);
             _spawners[obstacleType].SpawnObstacles(obstacleData, segment).Forget();
+        }
+    }
+
+    private void HandleStageSegmentRemoved(GameObject segment)
+    {
+        if (segment.name.Contains("ObstaclePlatform"))
+        {
+            foreach (var spawner in _spawners.Values)
+            {
+                spawner.ReturnObstaclesToPool(segment);
+            }
         }
     }
 

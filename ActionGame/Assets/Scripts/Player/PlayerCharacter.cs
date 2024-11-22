@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
@@ -30,19 +31,12 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
     {
         AutoScroll();
     }
-
-    /// <summary>
-    /// 自動スクロールを実行する。X方向に一定速度で移動。
-    /// </summary>
+    
     private void AutoScroll()
     {
         _rb.velocity = new Vector2(MoveSpeed, _rb.velocity.y);
     }
-
-    /// <summary>
-    /// プレイヤーの移動速度を外部から設定。
-    /// </summary>
-    /// <param name="newSpeed">新しい移動速度。</param>
+    
     public void SetMoveSpeed(float newSpeed)
     {
         MoveSpeed = newSpeed;
@@ -53,14 +47,11 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
         _rb.velocity = new Vector2(direction.x * MoveSpeed, _rb.velocity.y);
     }
 
-    /// <summary>
-    /// ジャンプ操作を処理。
-    /// </summary>
     private void HandleJump()
     {
         if (_isGrounded)
         {
-            _rb.velocity = new Vector2(_rb.velocity.x, characterStats.jumpForce);
+            _rb.velocity = new Vector2(MoveSpeed , characterStats.jumpForce);
             _isGrounded = false;
         }
     }
@@ -81,18 +72,13 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
     protected override void Die()
     {
         base.Die();
-
-        // ジャンプ入力ハンドラを解除
+        
         if (_inputHandler is PlayerInputHandler playerInputHandler)
         {
             playerInputHandler.OnJumpPressed -= HandleJump;
         }
     }
-
-    /// <summary>
-    /// 入力ハンドラの初期化。
-    /// </summary>
-    /// <param name="inputHandler">入力ハンドラ。</param>
+    
     public void Initialize(IInputHandler inputHandler)
     {
         _inputHandler = inputHandler;

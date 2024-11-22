@@ -708,7 +708,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -730,8 +730,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -945,7 +945,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1013329710}
   - component: {fileID: 1013329709}
-  - component: {fileID: 1013329711}
   m_Layer: 0
   m_Name: ObstacleGenerator
   m_TagString: Untagged
@@ -980,18 +979,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1013329711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1013329708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4e201975b46469381d1e07f908b7c89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1024513311
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,6 +1026,18 @@ MonoBehaviour:
   - {fileID: 4177356011123277588, guid: a38b5d7bc1d0b4daa972610e23e650f3, type: 3}
   - {fileID: 1238654841842063649, guid: ba2e68e28d6c047c1b952bddf19af029, type: 3}
   enemyPrefabs:
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
+  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
   - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
   obstacleDataList:
   - {fileID: 11400000, guid: 68635079619ef45b6b6d338956ab9fe5, type: 2}
