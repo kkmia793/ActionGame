@@ -14,11 +14,13 @@ public class EnemyManager : MonoBehaviour
     private void OnEnable()
     {
         StageEventDispatcher.OnStageSegmentGenerated += HandleStageSegmentGenerated;
+        StageEventDispatcher.OnStageSegmentRemoved += HandleStageSegmentRemoved;
     }
 
     private void OnDisable()
     {
         StageEventDispatcher.OnStageSegmentGenerated -= HandleStageSegmentGenerated;
+        StageEventDispatcher.OnStageSegmentRemoved -= HandleStageSegmentRemoved;
     }
 
     private void HandleStageSegmentGenerated(GameObject segment)
@@ -27,13 +29,15 @@ public class EnemyManager : MonoBehaviour
         {
             if (Random.value <= spawnProbabilityForLongPlatform)
             {
-                GenerateEnemies(segment, enemyCount:6).Forget();
+                GenerateEnemies(segment, Random.Range(12,16)).Forget();
             }
         }
-        else
-        {
-            //Debug.Log($"Skipping enemy spawn for segment: {segment.name}");
-        }
+    }
+
+    private void HandleStageSegmentRemoved(GameObject segment)
+    {
+        // セグメント削除時に関連する敵をプールに戻す
+        _enemySpawner.HandleSegmentRemoved(segment);
     }
 
     public async UniTask GenerateEnemies(GameObject segment, int enemyCount)
