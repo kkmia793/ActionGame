@@ -11,16 +11,12 @@ public class StageGenerator : MonoBehaviour
     private Vector3 _nextSpawnPosition;
 
     [SerializeField] private Transform player;
-    [SerializeField] private float spawnDistance = 30f; // プレイヤーがこの距離に達すると新しいセグメントを生成
-    [SerializeField] private int maxSegments = 5;       // 表示される最大セグメント数を設定
-    [SerializeField] private GameObject initialPlatformPrefab; // 最初に生成する初期プラットフォーム
-
-    private bool initialPlatformGenerated = false; // InitialPlatformを生成済みかどうか
+    [SerializeField] private float spawnDistance = 30f;
+    [SerializeField] private int maxSegments = 5;
+    [SerializeField] private GameObject initialPlatformPrefab;
 
     [Inject]
-    public void Construct(
-        IStageGenerationStrategy generationStrategy,
-        [Inject(Id = "SegmentPool")] GameObjectPool segmentPool)
+    public void Construct(IStageGenerationStrategy generationStrategy, [Inject(Id = "SegmentPool")] GameObjectPool segmentPool)
     {
         _generationStrategy = generationStrategy;
         _segmentPool = segmentPool;
@@ -33,12 +29,9 @@ public class StageGenerator : MonoBehaviour
 
     private async UniTaskVoid GenerateInitialSegments()
     {
-        if (!initialPlatformGenerated)
-        {
-            GenerateInitialPlatform();
-        }
+        GenerateInitialPlatform();
 
-        for (int i = 1; i < maxSegments; i++) // InitialPlatform以外を生成
+        for (int i = 1; i < maxSegments; i++)
         {
             await GenerateSegment();
         }
@@ -58,10 +51,10 @@ public class StageGenerator : MonoBehaviour
         initialPlatform.SetActive(true);
         _activeSegments.Enqueue(initialPlatform);
 
+        StageEventDispatcher.NotifyStageSegmentGenerated(initialPlatform);
+
         float segmentWidth = CalculateTotalWidth(initialPlatform);
         _nextSpawnPosition += new Vector3(segmentWidth, 0, 0);
-
-        initialPlatformGenerated = true; // 初期プラットフォームを生成済みに設定
     }
 
     private async UniTask GenerateSegment()
@@ -70,7 +63,7 @@ public class StageGenerator : MonoBehaviour
         newSegment.transform.position = _nextSpawnPosition;
         newSegment.SetActive(true);
         _activeSegments.Enqueue(newSegment);
-        
+
         StageEventDispatcher.NotifyStageSegmentGenerated(newSegment);
 
         float segmentWidth = CalculateTotalWidth(newSegment);
@@ -82,6 +75,16 @@ public class StageGenerator : MonoBehaviour
         }
 
         await UniTask.Yield();
+    }
+
+    private void RemoveOldSegment()
+    {
+        GameObject oldSegment = _activeSegments.Dequeue();
+        oldSegment.SetActive(false);
+
+        StageEventDispatcher.NotifyStageSegmentRemoved(oldSegment);
+
+        _segmentPool.Return(oldSegment);
     }
 
     private float CalculateTotalWidth(GameObject segment)
@@ -96,12 +99,5 @@ public class StageGenerator : MonoBehaviour
         }
 
         return combinedBounds.size.x;
-    }
-
-    private void RemoveOldSegment()
-    {
-        GameObject oldSegment = _activeSegments.Dequeue();
-        oldSegment.SetActive(false);
-        _segmentPool.Return(oldSegment);
     }
 }

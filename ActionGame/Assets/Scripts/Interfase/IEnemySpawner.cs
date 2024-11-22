@@ -8,4 +8,5 @@ public interface IEnemySpawner
     UniTask SpawnEnemies(GameObject segment, int enemyCount);
     List<GameObject> GetSpawnedEnemies(); // 生成された敵のリストを取得
     void ReturnEnemyToPool(GameObject enemy); // 敵をプールに戻す
+    void HandleSegmentRemoved(GameObject segment); // セグメント削除時の処理を追加
 }
