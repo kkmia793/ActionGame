@@ -399,7 +399,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.11372549, g: 0.11372549, b: 0.11372549, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -811,7 +811,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -906,7 +906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1021,17 +1021,14 @@ MonoBehaviour:
   - {fileID: 4190894126494025990, guid: 6f7391802ed494a31b14be8d18b20b9d, type: 3}
   - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
   - {fileID: 8003842323475433229, guid: 9fc8a0b8140f54acb90a0b909b44e65d, type: 3}
+  - {fileID: 9066793285944256996, guid: ae93ad1a5c0b446d7b8364213e9fa955, type: 3}
+  - {fileID: 4100745423904032302, guid: 11a61f432a2b8497d8d0eb489c8ea909, type: 3}
+  - {fileID: 8066808320560557658, guid: a8ab19369585841a09e9cd4966cd4fd5, type: 3}
   obstaclePrefabs:
   - {fileID: 1073769356438948573, guid: 74fcb5dc9d6614db190b98c3bc63d729, type: 3}
   - {fileID: 4177356011123277588, guid: a38b5d7bc1d0b4daa972610e23e650f3, type: 3}
   - {fileID: 1238654841842063649, guid: ba2e68e28d6c047c1b952bddf19af029, type: 3}
   enemyPrefabs:
-  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
-  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
-  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
-  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
-  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
-  - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
   - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
   - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
   - {fileID: 8309568961061149055, guid: 383186c6c030e4fa4971fb78ab0ea301, type: 3}
@@ -1290,7 +1287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

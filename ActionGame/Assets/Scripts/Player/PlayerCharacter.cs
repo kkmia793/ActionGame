@@ -6,7 +6,10 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
 {
     private Rigidbody2D _rb;
     private IInputHandler _inputHandler;
+    private int _jumpCount = 0;
+    private int _maxJumpCount = 2;
     private bool _isGrounded;
+    
 
     [SerializeField] private CharacterStats characterStats;
 
@@ -49,10 +52,11 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
 
     private void HandleJump()
     {
-        if (_isGrounded)
+        if (_jumpCount < _maxJumpCount)
         {
             _rb.velocity = new Vector2(MoveSpeed , characterStats.jumpForce);
             _isGrounded = false;
+            _jumpCount++;
         }
     }
 
@@ -61,6 +65,7 @@ public class PlayerCharacter : BaseCharacter, IDamageable, IMovable
         if (collision.gameObject.CompareTag("Ground"))
         {
             _isGrounded = true;
+            _jumpCount = 0;
         }
     }
 
