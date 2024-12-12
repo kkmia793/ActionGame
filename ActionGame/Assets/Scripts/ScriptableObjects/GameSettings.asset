@@ -16,4 +16,4 @@ MonoBehaviour:
   SpeedThreshold: 1
   DistancePerLevel: 100
   SpeedIncreasePerLevel: 0.5
-  InitialSpeed: 15
+  InitialSpeed: 20

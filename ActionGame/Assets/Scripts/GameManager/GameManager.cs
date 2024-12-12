@@ -64,9 +64,15 @@ public class GameManager : MonoBehaviour
         if (newLevel > _currentDifficultyLevel)
         {
             _currentDifficultyLevel = newLevel;
+            
             float newSpeed = _difficultyManager.GetPlayerSpeed(newLevel, gameSettings.InitialSpeed, gameSettings.SpeedIncreasePerLevel);
+            
+            newSpeed = Mathf.Min(newSpeed, gameSettings.MaxSpeed);
+            
             _playerState.SetPlayerMoveSpeed(newSpeed);
+            
             OnDifficultyLevelChanged?.Invoke(newLevel);
+
             Debug.Log($"New Difficulty Level: {_currentDifficultyLevel}, New Speed: {newSpeed}");
         }
     }
