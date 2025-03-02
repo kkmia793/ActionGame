@@ -34,7 +34,7 @@ public async UniTask LoadSceneAsync(string sceneName)
 ### 3. オブジェクトプール (GameObjectPool)
 
 - **メモリ効率の最適化:** 頻繁に生成・破棄されるゲームオブジェクトをプールすることで、メモリ負荷を軽減。
-- **パフォーマンス向上:** ガベージコレクションの影響を抑え、特にモバイル環境でのフレームレートを安定させます。
+- **パフォーマンス向上:** ガベージコレクションの影響を抑える。
 
 ```csharp
 public GameObject GetObject()
